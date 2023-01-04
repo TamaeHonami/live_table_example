@@ -1,0 +1,26 @@
+<h1>Show Table</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.table_show_path(@socket, :show, @table)}>
+    <.live_component
+      module={LiveTableExampleWeb.TableLive.FormComponent}
+      id={@table.id}
+      title={@page_title}
+      action={@live_action}
+      table={@table}
+      return_to={Routes.table_show_path(@socket, :show, @table)}
+    />
+  </.modal>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @table.title %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.table_show_path(@socket, :edit, @table), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.table_index_path(@socket, :index) %></span>

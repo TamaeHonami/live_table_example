@@ -1,0 +1,92 @@
+<div>
+  <h2><%= @title %></h2>
+
+  <.form
+    let={f}
+    for={@changeset}
+    id="table-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save">
+  
+    <%= label f, :title %>
+    <%= text_input f, :title %>
+    <%= error_tag f, :title %>
+
+    <table>
+      <thead>
+        <%= inputs_for f, :headers, fn fh -> %>
+          <th>
+            <%= text_input fh, :label %>
+            <%= error_tag fh, :label %>
+
+            <span>
+              <%= content_tag :button,
+                type: :button,
+                phx_target: @myself,
+                phx_click: :add_col,
+                phx_value_index: fh.index
+              do %>
+                Add
+              <% end %>
+            </span>
+            <span>
+              <%= content_tag :button,
+                type: :button,
+                phx_target: @myself,
+                phx_click: :delete_col,
+                phx_value_index: fh.index
+              do %>
+                Delete
+              <% end %>
+            </span>
+          </th>
+        <% end %>
+
+        <th><!-- Empty --></th>
+      </thead>
+
+      <tbody>
+        <%= inputs_for f, :rows, fn fr -> %>
+          <tr>
+
+            <%= inputs_for fr, :items, fn fi -> %>
+              <td>
+                <%= textarea fi, :context %>
+                <%= error_tag fi, :context %>
+              </td>
+            <% end %>
+
+            <td style="text-align: center;">
+              <%= content_tag :button,
+                type: :button,
+                phx_target: @myself,
+                phx_click: :delete_row,
+                phx_value_index: fr.index
+              do %>
+                Delete
+              <% end %>
+            </td>
+
+          </tr>
+        <% end %>
+
+        <tr>
+          <td colspan={length(inputs_for(f, :headers)) + 1} style="text-align: center;">
+            <%= content_tag :button,
+              type: :button,
+              phx_target: @myself,
+              phx_click: :add_row
+            do %>
+              Add
+            <% end %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div>
+      <%= submit "Save", phx_disable_with: "Saving..." %>
+    </div>
+  </.form>
+</div>
